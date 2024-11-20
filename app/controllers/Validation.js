@@ -5,7 +5,7 @@ export class Validation {
         if (regex.test(value)) {
 
             element.innerHTML = ''
-            element.style.direction = 'block'
+            element.style.display = 'block'
             return true
         }
         element.innerHTML = messageError
@@ -18,7 +18,7 @@ export class Validation {
         if (regex.test(value)) {
 
             element.innerHTML = ''
-            element.style.direction = 'block'
+            element.style.display = 'block'
             return true
         }
         element.innerHTML = messageError
