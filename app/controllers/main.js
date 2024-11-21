@@ -4,20 +4,23 @@ import { QLNVServices } from "../services/qlnv.services.js";
 
 
 const validation = new Validation()
+const nhanvien = new NhanVien()
+
 
 const showEmp = (data) => {
 
+
     let htmlContent = ''
-    data.forEach((item, index) => {
+    data.forEach((item) => {
+
         htmlContent += `
         <tr>
-            <td style="display: none;">${item + 1}</td>
             <td>${item.tknv}</td>
             <td>${item.name}</td>
             <td>${item.email}</td>
             <td>${item.datepicker}</td>
             <td>${item.chucvu}</td>
-            <td>${item.totalSalary}</td>
+            <td>${Intl.NumberFormat('vn-VN').format(item.totalSalary)}</td>
             <td>${item.empType}</td>
             <td>
                     <button class="btn btn-warning" data-toggle="modal" data-target="#myModal"
@@ -35,9 +38,14 @@ validation.getElement('btnThem').onclick = () => {
     validation.getElement('btnCapNhat').style.display = 'none'
     validation.getElement('btnThemNV').style.display = 'block'
 }
+
+
 const getEmployee = async () => {
     try {
+
         const result = await QLNVServices.getEmpList()
+
+
         showEmp(result.data)
     } catch (error) {
         console.log("error: ", error);
@@ -45,6 +53,7 @@ const getEmployee = async () => {
     }
 }
 getEmployee()
+
 const getUserInput = () => {
     const elements = document.querySelectorAll('#nhanVienForm input, #nhanVienForm select')
     let emp = {}
@@ -54,21 +63,22 @@ const getUserInput = () => {
         emp[id] = value
     })
     // console.log("emp: ", emp);
-    return new NhanVien(emp.tknv, emp.name, emp.email, emp.password, emp.datepicker, emp.luongCB, emp.chucvu, emp.gioLam, emp.totalSalary, emp.empType)
+    return new NhanVien(emp.tknv, emp.name, emp.email, emp.password, emp.datepicker, emp.luongCB, emp.chucvu, emp.gioLam)
 }
 
 document.getElementById('nhanVienForm').onsubmit = async (ev) => {
     try {
         ev.preventDefault()
+        let isValid = true
         const formElement = validation.getElement('nhanVienForm')
         const action = formElement.getAttribute('data-action')
         const _userInput = getUserInput()
+        isValid &= validation.isEmail(_userInput.email, 'Địa chỉ email không hợp lệ 1', 'tbEmail')
+        if (!isValid) return
 
         if (action === 'edit') {
             const empID = formElement.getAttribute('data-id')
             const result = await QLNVServices.editEmp(empID, _userInput)
-            console.log("result: ", result);
-
         }
         if (action !== 'edit') {
             const result = await QLNVServices.addEmpList(_userInput)
@@ -76,7 +86,7 @@ document.getElementById('nhanVienForm').onsubmit = async (ev) => {
         }
 
         getEmployee()
-        console.log("result 1: ", result);
+
     } catch (error) {
         console.log("error: ", error);
 
@@ -88,6 +98,7 @@ document.getElementById('nhanVienForm').onsubmit = async (ev) => {
 
 
 window.editEmp = async (empId) => {
+    console.log("empId: ", empId);
 
 
     try {
@@ -125,5 +136,8 @@ window.deleteEmp = async (empId) => {
         console.log("error: ", error);
 
     }
+}
+function getTest() {
+    alert('Test')
 }
 
