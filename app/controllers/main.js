@@ -80,7 +80,7 @@ document.getElementById('nhanVienForm').onsubmit = async (ev) => {
 
         const action = formElement.getAttribute('data-action')
 
-        let _userInput = getUserInput()
+        const _userInput = getUserInput()
 
         isValid &= validation.required(_userInput.tknv, 'Tài khoản nhân viên không được để trống', 'tbTKNV') && validation.betweenLength(_userInput.tknv, 4, 6, 'Tài khoản phải tối đa 4 - 6 ký tự', 'tbTKNV')
         isValid &= validation.required(_userInput.name, 'Tên nhân viên không được để trống', 'tbTen') && validation.isCharacter(_userInput.name, 'Tên nhân viên phải là chữ', 'tbTen')
