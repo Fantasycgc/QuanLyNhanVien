@@ -33,4 +33,9 @@ export class NhanVien {
             return 'Trung bình'
     }
 
+    async hashPassword(password) {
+
+        return await CryptoJS.MD5(password).toString();
+    }
+
 }
